@@ -21,7 +21,12 @@ class Bubble:
     for i in range(color_offset):
       self.color = next(self.BUBBLE_COLOR_CYCLE)
 
+    self.visible = False
+
   def update(self, instructions: [str]):
+    if instructions:
+      self.visible = True
+
     for instruction in instructions:
       match instruction:
         case 'color': self.color = next(self.BUBBLE_COLOR_CYCLE)
@@ -34,6 +39,9 @@ class Bubble:
         case _: raise Exception(f'Invalid instruction: {instruction}')
 
   def draw(self):
+    if not self.visible:
+      return
+
     self.draw_circle()
     self.draw_highlight()
     self.draw_border()
