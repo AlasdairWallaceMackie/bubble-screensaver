@@ -29,6 +29,8 @@ class Bubble:
         case 'smaller': self.increment(-1)
         case 'up': self.y -= 1
         case 'down': self.y += 1
+        case 'left': self.x -= 1
+        case 'right': self.x += 1
         case _: raise Exception(f'Invalid instruction: {instruction}')
 
   def draw(self):

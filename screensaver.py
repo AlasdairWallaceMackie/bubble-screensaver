@@ -20,6 +20,7 @@ class Screensaver:
       return
 
     new_instructions = []
+
     if random_chance(16):
       new_instructions.append('color')
     if random_chance(1):
@@ -30,6 +31,10 @@ class Screensaver:
       new_instructions.append('up')
     if random_chance(1):
       new_instructions.append('down')
+    if random_chance(5):
+      new_instructions.append('left')
+    if random_chance(5):
+      new_instructions.append('right')
 
     for index, instructions in enumerate(self.instruction_queue):
       self.bubble_lines[index].update(instructions)
@@ -41,12 +46,6 @@ class Screensaver:
       line.draw()
 
   #################################
-
-def frame_count_last_digit():
-  return int(str(pyxel.frame_count)[-1])
-
-def coin_flip():
-  return random.choice([True, False])
 
 def random_chance(odds_damper):
   chances = [True] + [False for i in range(odds_damper)]
