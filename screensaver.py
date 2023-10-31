@@ -3,7 +3,7 @@ import random
 from collections import deque
 from bubble_line import BubbleLine
 
-SCREENSAVER_SPEED = 3 # Higher is slower
+SCREENSAVER_SPEED = 4 # Higher is slower
 BUBBLE_LINE_LENGTH = 16
 BUBBLE_LINE_COUNT = 1
 
@@ -13,22 +13,20 @@ class Screensaver:
     self.instruction_queue = deque([[] for l in range(BUBBLE_LINE_COUNT)], BUBBLE_LINE_COUNT)
 
   def update(self):
-    # if pyxel.frame_count % SCREENSAVER_SPEED != 0:
-    #   return
+    if pyxel.frame_count % SCREENSAVER_SPEED != 0:
+      return
 
     new_instructions = []
-    if pyxel.frame_count % 5 == 0:
+    if random_chance(6):
       new_instructions.append('color')
-    if frame_count_last_digit() in range(2, 6):
+    if random_chance(1):
       new_instructions.append('bigger')
-    if frame_count_last_digit() in range(6, 10):
+    if random_chance(1):
       new_instructions.append('smaller')
-    if frame_count_last_digit() in range(0, 4):
+    if random_chance(1):
       new_instructions.append('up')
-    if frame_count_last_digit() in range(5, 9):
+    if random_chance(1):
       new_instructions.append('down')
-
-
 
     for index, instructions in enumerate(self.instruction_queue):
       self.bubble_lines[index].update(instructions)
@@ -46,6 +44,10 @@ def frame_count_last_digit():
 
 def coin_flip():
   return random.choice([True, False])
+
+def random_chance(odds_damper):
+  chances = [True] + [False for i in range(odds_damper)]
+  return random.choice(chances)
 
 """
 Wave
