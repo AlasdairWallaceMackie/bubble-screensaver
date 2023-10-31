@@ -1,15 +1,13 @@
 import pyxel
-from itertools import cycle
+from collections import deque
 from bubble import Bubble
 
-BUBBLE_COUNT = 16
-BUBBLE_LINE_SPEED = 4 # Higher is slower
-
 class BubbleLine:
-  def __init__(self, x, y):
+  def __init__(self, x, y, bubble_count):
     self.x = x
     self.y = y
-    self.current_index = 0
+
+    self.instruction_queue = deque([[] for b in range(bubble_count)], bubble_count)
 
     self.bubbles = [
       Bubble(
@@ -17,18 +15,17 @@ class BubbleLine:
         5,
         i
       )
-      for i in range(BUBBLE_COUNT)
+      for i in range(bubble_count)
     ]
 
-  def update(self):
-    if pyxel.frame_count % BUBBLE_LINE_SPEED == 0:
-      self.bubbles[self.current_index].update()
-      self.current_index += 1
-      if self.current_index >= len(self.bubbles):
-        self.current_index = 0
+  def update(self, new_instructions: [str]):
+    for index, instructions in enumerate(self.instruction_queue):
+      self.bubbles[index].update(instructions)
+
+    self.instruction_queue.appendleft(new_instructions)
 
   def draw(self):
-    for bubble in self.bubbles:
+    for bubble in self.bubbles[::-1]:
       bubble.draw()
 
   #########################

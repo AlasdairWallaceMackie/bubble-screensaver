@@ -11,25 +11,29 @@ BUBBLE_COLOR_CYCLE = cycle([
   pyxel.COLOR_CYAN,
   pyxel.COLOR_PINK,
 ])
-BUBBLE_RADIUS_CYCLE = cycle(
-  [r for r in range(BUBBLE_RADIUS_MIN, BUBBLE_RADIUS_MAX + 1)]
-  + [r for r in range(BUBBLE_RADIUS_MIN, BUBBLE_RADIUS_MAX)][::-1]
-)
-BUBBLE_Y_POSITION_CYCLE = cycle([1,1,1,1,1,-1,-1,-1,-1])
 
 class Bubble:
   def __init__(self, x, y, radius, color_offset):
     self.x = x
     self.y = y
-    self.radius = next(BUBBLE_RADIUS_CYCLE)
+    self.radius = radius
 
+    self.color = next(BUBBLE_COLOR_CYCLE)
     for i in range(color_offset):
       self.color = next(BUBBLE_COLOR_CYCLE)
 
-  def update(self):
-    self.color = next(BUBBLE_COLOR_CYCLE)
-    self.radius = next(BUBBLE_RADIUS_CYCLE)
-    self.y += next(BUBBLE_Y_POSITION_CYCLE)
+    assert self.color
+
+  def update(self, instructions: [str]):
+    for instruction in instructions:
+      match instruction:
+        case 'color': self.color = next(BUBBLE_COLOR_CYCLE)
+        case 'bigger': self.radius += 1
+        case 'smaller': self.radius -= 1
+        case 'up': self.y -= 1
+        case 'down': self.y += 1
+        case _: raise Exception(f'Invalid instruction: {instruction}')
+
 
   def draw(self):
     self.draw_circle()
