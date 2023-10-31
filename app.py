@@ -1,6 +1,6 @@
 import os, sys
 import pyxel
-from .screensaver import Screensaver
+from screensaver import Screensaver
 
 WINDOW_WIDTH = 128
 WINDOW_HEIGHT= WINDOW_WIDTH
@@ -21,4 +21,7 @@ class App:
     self.screensaver.update()
 
   def draw(self):
+    pyxel.cls(pyxel.COLOR_BLACK)
     self.screensaver.draw()
+
+App()

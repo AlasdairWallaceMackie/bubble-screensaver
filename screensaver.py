@@ -1,11 +1,23 @@
 import pyxel
+from bubble_line import BubbleLine
 
 class Screensaver:
   def __init__(self):
-    pass
+    self.bubble_line = BubbleLine(-2, 32)
 
   def update(self):
-    pass
+    self.bubble_line.update()
 
   def draw(self):
-    pass
+    self.bubble_line.draw()
+
+"""
+Wave
+  |
+  v
+Line
+  |
+  v
+Bubble - Use circle with white highlights
+
+"""
