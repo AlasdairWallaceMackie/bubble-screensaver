@@ -1,8 +1,6 @@
 import pyxel
 from itertools import cycle
-
-BUBBLE_RADIUS_MIN = 5
-BUBBLE_RADIUS_MAX = 8
+from constants import BUBBLE_RADIUS_MIN, BUBBLE_RADIUS_MAX
 
 class Bubble:
   def __init__(self, x, y, radius, color_offset):
@@ -23,8 +21,6 @@ class Bubble:
     for i in range(color_offset):
       self.color = next(self.BUBBLE_COLOR_CYCLE)
 
-    assert self.color
-
   def update(self, instructions: [str]):
     for instruction in instructions:
       match instruction:
@@ -37,10 +33,8 @@ class Bubble:
 
   def draw(self):
     self.draw_circle()
-    self.draw_highlight(
-      self.x + pyxel.floor(self.radius / 2) - 1,
-      self.y - pyxel.floor(self.radius / 2) - 1,
-    )
+    self.draw_highlight()
+    self.draw_border()
 
   ############################
 
@@ -58,6 +52,15 @@ class Bubble:
       self.color,
     )
 
-  def draw_highlight(self, x, y):
-    pyxel.rect(x, y, 2, 2, pyxel.COLOR_WHITE)
-    pyxel.rect(x + 1, y + 1, 2, 2, pyxel.COLOR_WHITE)
+  def draw_highlight(self):
+    pyxel.blt(
+      self.x, self.y - pyxel.floor(self.radius * 0.75) - 1,
+      0,
+      0, 8,
+      8, 8,
+      pyxel.COLOR_BLACK
+    )
+
+
+  def draw_border(self):
+    pyxel.circb(self.x, self.y, self.radius + 1, pyxel.COLOR_NAVY)

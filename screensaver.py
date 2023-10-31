@@ -1,15 +1,18 @@
 import pyxel
 import random
+from constants import *
 from collections import deque
 from bubble_line import BubbleLine
 
-SCREENSAVER_SPEED = 4 # Higher is slower
-BUBBLE_LINE_LENGTH = 16
-BUBBLE_LINE_COUNT = 1
-
 class Screensaver:
   def __init__(self):
-    self.bubble_lines = [BubbleLine(-2, 32, BUBBLE_LINE_LENGTH)]
+    self.bubble_lines = [
+      BubbleLine(
+        -2 * i,
+        -32 + (i * BUBBLE_SPACING ),
+        BUBBLE_LINE_LENGTH
+      ) for i in range(BUBBLE_LINE_COUNT)
+    ]
     self.instruction_queue = deque([[] for l in range(BUBBLE_LINE_COUNT)], BUBBLE_LINE_COUNT)
 
   def update(self):
@@ -17,7 +20,7 @@ class Screensaver:
       return
 
     new_instructions = []
-    if random_chance(6):
+    if random_chance(16):
       new_instructions.append('color')
     if random_chance(1):
       new_instructions.append('bigger')

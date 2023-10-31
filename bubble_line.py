@@ -1,4 +1,5 @@
 import pyxel
+import constants
 from collections import deque
 from bubble import Bubble
 
@@ -11,11 +12,10 @@ class BubbleLine:
 
     self.bubbles = [
       Bubble(
-        self.x + (i * 9), self.y,
+        self.x + (i * constants.BUBBLE_SPACING), self.y,
         5,
         i
-      )
-      for i in range(bubble_count)
+      ) for i in range(bubble_count)
     ]
 
   def update(self, new_instructions: [str]):

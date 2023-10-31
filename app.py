@@ -8,6 +8,7 @@ WINDOW_HEIGHT= WINDOW_WIDTH
 class App:
   def __init__(self):
     pyxel.init(WINDOW_WIDTH, WINDOW_HEIGHT)
+    pyxel.load("sprites.pyxres")
 
     self.screensaver = Screensaver()
 
