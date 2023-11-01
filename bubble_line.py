@@ -4,9 +4,10 @@ from collections import deque
 from bubble import Bubble
 
 class BubbleLine:
-  def __init__(self, x, y, bubble_count):
+  def __init__(self, x, y, bubble_count, index):
     self.x = x
     self.y = y
+    self.index = index
 
     self.instruction_queue = deque([[] for b in range(bubble_count)], bubble_count)
 

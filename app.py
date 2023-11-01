@@ -1,9 +1,7 @@
 import os, sys
 import pyxel
+from constants import WINDOW_WIDTH, WINDOW_HEIGHT
 from screensaver import Screensaver
-
-WINDOW_WIDTH = 128
-WINDOW_HEIGHT = WINDOW_WIDTH
 
 class App:
   def __init__(self):
