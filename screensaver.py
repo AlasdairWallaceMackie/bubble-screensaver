@@ -6,6 +6,11 @@ from bubble_line import BubbleLine
 
 class Screensaver:
   def __init__(self):
+    self.x = -2
+    self.y = -32
+
+    self.current_spacing = BUBBLE_SPACING
+
     self.bubble_lines = [
       BubbleLine(
         -2 * i,
@@ -21,7 +26,7 @@ class Screensaver:
 
     new_instructions = []
 
-    if random_chance(16):
+    if random_chance(12):
       new_instructions.append('color')
     if random_chance(1):
       new_instructions.append('bigger')
@@ -35,6 +40,12 @@ class Screensaver:
       new_instructions.append('left')
     if random_chance(5):
       new_instructions.append('right')
+    if self.current_spacing <= BUBBLE_SPACING_MAX and random_chance(12):
+      new_instructions.append('wide')
+      self.current_spacing += 1
+    if self.current_spacing >= BUBBLE_SPACING_MIN and random_chance(12):
+      new_instructions.append('narrow')
+      self.current_spacing -= 1
 
     for index, instructions in enumerate(self.instruction_queue):
       self.bubble_lines[index].update(instructions)

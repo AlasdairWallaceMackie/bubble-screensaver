@@ -3,7 +3,7 @@ from itertools import cycle
 from constants import BUBBLE_RADIUS_MIN, BUBBLE_RADIUS_MAX
 
 class Bubble:
-  def __init__(self, x, y, radius, color_offset):
+  def __init__(self, x, y, radius, index):
     self.BUBBLE_COLOR_CYCLE = cycle([
       pyxel.COLOR_RED,
       pyxel.COLOR_ORANGE,
@@ -16,9 +16,10 @@ class Bubble:
     self.x = x
     self.y = y
     self.radius = radius
+    self.index = index
 
     self.color = next(self.BUBBLE_COLOR_CYCLE)
-    for i in range(color_offset):
+    for i in range(self.index):
       self.color = next(self.BUBBLE_COLOR_CYCLE)
 
     self.visible = False
@@ -36,6 +37,12 @@ class Bubble:
         case 'down': self.y += 1
         case 'left': self.x -= 1
         case 'right': self.x += 1
+        case 'wide':
+          self.x += 1 + self.index
+          self.y += 1 + self.index
+        case 'narrow':
+          self.x -= 1 + self.index
+          self.y -= 1 + self.index
         case _: raise Exception(f'Invalid instruction: {instruction}')
 
   def draw(self):
