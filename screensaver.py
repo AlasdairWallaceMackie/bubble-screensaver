@@ -6,18 +6,20 @@ from bubble_line import BubbleLine
 
 class Screensaver:
   def __init__(self):
-    self.x = -2
-    self.y = -32
+    self.dx = 0
+    self.dy = 0
 
     self.current_spacing = BUBBLE_SPACING
 
     self.bubble_lines = [
       BubbleLine(
-        -2 * i,
-        -32 + (i * BUBBLE_SPACING ),
-        BUBBLE_LINE_LENGTH
+        SCREENSAVER_ORIGIN_X * i,
+        SCREENSAVER_ORIGIN_Y + (i * BUBBLE_SPACING ),
+        BUBBLE_LINE_LENGTH,
+        i
       ) for i in range(BUBBLE_LINE_COUNT)
     ]
+
     self.instruction_queue = deque([[] for l in range(BUBBLE_LINE_COUNT)], BUBBLE_LINE_COUNT)
 
   def update(self):
@@ -32,13 +34,16 @@ class Screensaver:
       new_instructions.append('bigger')
     if random_chance(1):
       new_instructions.append('smaller')
-    if random_chance(1):
+    if self.dy >= SCREENSAVER_DY_MIN and random_chance(1):
       new_instructions.append('up')
-    if random_chance(1):
+      self.dy -= 1
+    if self.dy <= SCREENSAVER_DY_MAX and random_chance(1):
       new_instructions.append('down')
-    if random_chance(5):
+      self.dy += 1
+    if self.dx >= SCREENSAVER_DX_MIN and random_chance(5):
       new_instructions.append('left')
-    if random_chance(5):
+      self.dx -= 1
+    if self.dx <= SCREENSAVER_DX_MAX and random_chance(5):
       new_instructions.append('right')
     if self.current_spacing <= BUBBLE_SPACING_MAX and random_chance(12):
       new_instructions.append('wide')
@@ -46,6 +51,7 @@ class Screensaver:
     if self.current_spacing >= BUBBLE_SPACING_MIN and random_chance(12):
       new_instructions.append('narrow')
       self.current_spacing -= 1
+      self.dx += 1
 
     for index, instructions in enumerate(self.instruction_queue):
       self.bubble_lines[index].update(instructions)
