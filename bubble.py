@@ -11,9 +11,7 @@ class Bubble:
     self.index = index
 
     self.BUBBLE_COLOR_CYCLE = copy(BUBBLE_COLOR_CYCLE)
-    self.color = next(self.BUBBLE_COLOR_CYCLE)
-    for i in range(self.index):
-      self.color = next(self.BUBBLE_COLOR_CYCLE)
+    self.color = self.init_color()
 
     self.visible = False
 
@@ -21,18 +19,7 @@ class Bubble:
     if instructions:
       self.visible = True
 
-    for instruction in instructions:
-      match instruction:
-        case 'color': self.color = next(self.BUBBLE_COLOR_CYCLE)
-        case 'bigger': self.increment(1)
-        case 'smaller': self.increment(-1)
-        case 'up': self.y -= 1
-        case 'down': self.y += 1
-        case 'left': self.x -= 1
-        case 'right': self.x += 1
-        case 'wide': pass
-        case 'narrow': pass
-        case _: raise Exception(f'Invalid instruction: {instruction}')
+    self.carry_out_instructions(instructions)
 
   def draw(self):
     if not self.visible:
@@ -44,9 +31,32 @@ class Bubble:
 
   ############################
 
-  def increment(self, amount: int):
+  def init_color(self):
+    """ Offsetting the color by the instance index ensures neighbors don't have the same color """
+    color = next(self.BUBBLE_COLOR_CYCLE)
+    for i in range(self.index):
+      color = next(self.BUBBLE_COLOR_CYCLE)
+
+    return color
+
+  def increment_radius(self, amount: int):
+    """ Use negative integers to shrink radius """
     if self.radius + amount in range(BUBBLE_RADIUS_MIN, BUBBLE_RADIUS_MAX + 1):
       self.radius += amount
+
+  def carry_out_instructions(self, instructions: [str]):
+    for instruction in instructions:
+      match instruction:
+        case 'color': self.color = next(self.BUBBLE_COLOR_CYCLE)
+        case 'bigger': self.increment_radius(1)
+        case 'smaller': self.increment_radius(-1)
+        case 'up': self.y -= 1
+        case 'down': self.y += 1
+        case 'left': self.x -= 1
+        case 'right': self.x += 1
+        case 'wide': pass
+        case 'narrow': pass
+        case _: raise Exception(f'Invalid instruction: {instruction}')
 
   ############################
 

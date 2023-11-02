@@ -25,7 +25,21 @@ class Screensaver:
   def update(self):
     if pyxel.frame_count % SCREENSAVER_SPEED != 0:
       return
+    
+    self.update_bubble_lines()
+    self.instruction_queue.appendleft(self.generate_new_instructions())
 
+  def draw(self):
+    for line in self.bubble_lines:
+      line.draw()
+
+  #################################
+
+  def update_bubble_lines(self):
+    for index, instructions in enumerate(self.instruction_queue):
+      self.bubble_lines[index].update(instructions)
+
+  def generate_new_instructions(self):
     new_instructions = []
 
     if random_chance(12):
@@ -34,54 +48,27 @@ class Screensaver:
       new_instructions.append('bigger')
     if random_chance(1):
       new_instructions.append('smaller')
-    if self.dy >= SCREENSAVER_DY_MIN and random_chance(1):
+    if random_chance(1) and self.dy >= SCREENSAVER_DY_MIN:
       new_instructions.append('up')
       self.dy -= 1
-    if self.dy <= SCREENSAVER_DY_MAX and random_chance(1):
+    if random_chance(1) and self.dy <= SCREENSAVER_DY_MAX:
       new_instructions.append('down')
       self.dy += 1
-    if self.dx >= SCREENSAVER_DX_MIN and random_chance(5):
+    if random_chance(5) and self.dx >= SCREENSAVER_DX_MIN:
       new_instructions.append('left')
       self.dx -= 1
-    if self.dx <= SCREENSAVER_DX_MAX and random_chance(5):
+    if random_chance(5) and self.dx <= SCREENSAVER_DX_MAX:
       new_instructions.append('right')
-    if self.current_spacing <= BUBBLE_SPACING_MAX and random_chance(12):
+      self.dx += 1
+    if random_chance(12) and self.current_spacing <= BUBBLE_SPACING_MAX:
       new_instructions.append('wide')
       self.current_spacing += 1
-    if self.current_spacing >= BUBBLE_SPACING_MIN and random_chance(12):
+    if random_chance(12) and self.current_spacing >= BUBBLE_SPACING_MIN:
       new_instructions.append('narrow')
       self.current_spacing -= 1
-      self.dx += 1
 
-    for index, instructions in enumerate(self.instruction_queue):
-      self.bubble_lines[index].update(instructions)
-
-    self.instruction_queue.appendleft(new_instructions)
-
-  def draw(self):
-    for line in self.bubble_lines:
-      line.draw()
-
-  #################################
+    return new_instructions
 
 def random_chance(odds_damper):
   chances = [True] + [False for i in range(odds_damper)]
   return random.choice(chances)
-
-"""
-Wave
-  |
-  v
-Line
-  |
-  v
-Bubble - Use circle with white highlights
-
-"""
-
-"""
-Each bubble line has a stack of instructions
-An instruction is sent and it is passed once to each bubble in the line
-  There can be multiple instructions when a command is sent
-After the last bubble has been updated, remove the instruction
-"""
