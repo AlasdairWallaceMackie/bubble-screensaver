@@ -37,4 +37,3 @@ class BubbleLine:
     for bubble in self.bubbles:
       bubble.x += dx 
       bubble.y += dy
-
