@@ -27,8 +27,8 @@ class Bubble:
     if not self.visible:
       return
 
-    self.draw_circle()
     self.draw_border()
+    self.draw_circle()
     self.draw_dithering()
     self.draw_highlight()
 
@@ -90,7 +90,7 @@ class Bubble:
     )
 
   def draw_border(self):
-    pyxel.circb(self.x, self.y, self.radius + 1, BUBBLE_BORDER_COLOR)
+    pyxel.circ(self.x, self.y, self.radius + 1, BUBBLE_BORDER_COLOR)
 
   ######################
   # Dithering Functions
