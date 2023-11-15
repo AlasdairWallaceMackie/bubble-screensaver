@@ -1,6 +1,6 @@
 import os, sys
 import pyxel
-from constants import WINDOW_WIDTH, WINDOW_HEIGHT
+from constants import WINDOW_WIDTH, WINDOW_HEIGHT, RECURSION_LIMIT
 from screensaver import Screensaver
 
 class App:
@@ -23,4 +23,5 @@ class App:
     pyxel.cls(pyxel.COLOR_BLACK)
     self.screensaver.draw()
 
+sys.setrecursionlimit(RECURSION_LIMIT)
 App()

@@ -1,6 +1,8 @@
 import pyxel
 from itertools import cycle
 
+RECURSION_LIMIT = 512
+
 WINDOW_HEIGHT = 128
 WINDOW_WIDTH = WINDOW_HEIGHT * 2
 

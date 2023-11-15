@@ -43,7 +43,7 @@ class Bubble:
     return color
 
   def increment_radius(self, amount: int):
-    """ Use negative integers to shrink radius """
+    """ Can use a negative value for the `amount` parameter to shrink radius """
     if self.radius + amount in range(BUBBLE_RADIUS_MIN, BUBBLE_RADIUS_MAX + 1):
       self.radius += amount
 
@@ -101,13 +101,12 @@ class Bubble:
       return
 
     try:
-      # We are offsetting the start point of the dithering algorithm. If it's initiated in the bubble's center, there will be an issue if the center is inside a neighbor bubble.
+      # We are offsetting the start point of the dithering algorithm. If it's initiated in the bubble's center, the algorithm could be initialized inside an overlapping neighbor bubble instead
       self.recursive_dither(
         self.x + ((self.radius / 2) + 1),
         self.y - ((self.radius / 2) + 1),
       )
-    except:
-      # There is still a rare chance of a RecursionError, so we catch it here
+    except RecursionError: # There is still a rare chance of a RecursionError, so we catch it here
       return
 
   def recursive_dither(self, x, y):
@@ -119,7 +118,7 @@ class Bubble:
     if location_color == self.current_color and not self.found_next_color_in_neighbor(x, y):
       pyxel.pset(x, y, self.next_color)
 
-    self.color_neighbors(x, y)
+    self.set_neighbors_colors(x, y)
 
   def found_next_color_in_neighbor(self, x, y) -> bool:
     for new_x, new_y in self.neighbor_coordinates(x, y):
@@ -128,12 +127,12 @@ class Bubble:
       
     return False
 
-  def color_neighbors(self, x, y):
+  def set_neighbors_colors(self, x, y):
     for new_x, new_y in self.neighbor_coordinates(x, y):
       if pyxel.pget(new_x, new_y) != self.next_color:
         self.recursive_dither(new_x, new_y)
 
-  def neighbor_coordinates(self, x, y) -> [int, int]:
+  def neighbor_coordinates(self, x, y) -> [(int, int)]:
     return [
       (x + 1, y),
       (x - 1, y),
